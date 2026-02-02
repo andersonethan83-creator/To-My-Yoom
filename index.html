@@ -1,1 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Will You Be Mine 💘</title>
 
+<style>
+:root{
+  --pink:#ff4d88;
+  --lightpink:#ffb3c7;
+  --red:#ff4d6d;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  overflow-x:hidden;
+  background:#000;
+}
+
+/* ===== FULLSCREEN BACKGROUND SLIDESHOW ===== */
+.bgwrap{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  overflow:hidden;
+}
+
+.bg{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:0;
+  animation:bgFade 16s infinite;
+  transform:scale(1.03);
+  filter: brightness(.72) saturate(1.05);
+}
+
+.bg1{ background-image:url("photo1.jpg"); animation-delay:0s; }
+.bg2{ background-image:url("photo2.jpg"); animation-delay:4s; }
+.bg3{ background-image:url("photo3.jpg"); animation-delay:8s; }
+.bg4{ background-image:url("photo4.jpg"); animation-delay:12s; }
+
+@keyframes bgFade{
+  0%{opacity:0;}
+  10%{opacity:1;}
+  25%{opacity:1;}
+  35%{opacity:0;}
+  100%{opacity:0;}
+}
+
+/* soft dark overlay so text/buttons pop */
+.bgTint{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background: radial-gradient(circle at 30% 20%, rgba(0,0,0,.25), rgba(0,0,0,.55));
+}
+
+/* ===== CONFETTI ===== */
+#confetti{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:999;
+  display:none;
+}
+
+/* ===== CENTER WHITE CARD ===== */
+.page{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px 16px;
+}
+
+.wrap{
+  width:min(900px,92vw);
+  padding:26px;
+  border-radius:26px;
+  background:#fff;              /* SOLID WHITE like you wanted */
+  box-shadow:0 22px 70px rgba(0,0,0,.35);
+  border:1px solid rgba(0,0,0,.06);
+}
+
+/* TITLE */
+h1{
+  text-align:center;
+  font-size:42px;
+  margin:0 0 18px;
+  line-height:1.1;
+}
+
+/* SHIMMER NAME */
+.name{
+  background:linear-gradient(90deg,var(--pink),var(--lightpink),var(--pink));
+  background-size:200%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shimmer 3s infinite;
+  font-weight:900;
+}
+
+@keyframes shimmer{
+  0%{background-position:0%;}
+  50%{background-position:100%;}
+  100%{background-position:0%;}
+}
+
+/* BUTTON AREA (white box area stays clean) */
+.stage{
+  position:relative;
+  height:280px;
+  border-radius:18px;
+  border:1px solid rgba(0,0,0,.08);
+  background: #ffffff;
+  overflow:hidden;
+}
+
+/* Buttons sit on top */
+.buttons{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+
+button{
+  position:absolute;
+  transform:translate(-50%,-50%);
+  padding:14px 26px;
+  border-radius:999px;
+  font-weight:900;
+  letter-spacing:.08em;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
+}
+
+#yes{
+  background:linear-gradient(135deg,var(--pink),var(--lightpink));
+  color:#fff;
+  left:35%;
+  top:62%;
+}
+
+#no{
+  background:#fff;
+  color:#000;
+  border:2px solid var(--pink);
+  left:65%;
+  top:62%;
+}
+
+/* ===== OVERLAY (Congrats + button BELOW it) ===== */
+.overlay{
+  position:absolute;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:16px;                     /* ensures spacing */
+  padding:24px;
+  background:rgba(255,241,246,.92);
+  backdrop-filter:blur(8px);
+  z-index:5;
+  text-align:center;
+}
+
+.overlay.show{display:flex;}
+
+.big{
+  font-size:34px;
+  font-weight:1000;
+  line-height:1.15;
+  margin:0;
+}
+
+.next{
+  position:static;              /* IMPORTANT: stops it overlapping the text */
+  transform:none;               /* IMPORTANT */
+  padding:12px 22px;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--red),var(--pink));
+  color:#fff;
+  border:none;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* CARD MESSAGE */
+.card{
+  display:none;
+  margin-top:18px;
+  padding:30px;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 18px 55px rgba(0,0,0,.20);
+  border:1px solid rgba(0,0,0,.06);
+}
+
+.card.show{display:block;}
+
+.card p{
+  white-space:pre-wrap;
+  line-height:1.55;
+  font-size:16px;
+}
+
+@media (max-width:520px){
+  h1{font-size:34px}
+  .stage{height:260px}
+  .big{font-size:28px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- FULLSCREEN BACKGROUND -->
+<div class="bgwrap" aria-hidden="true">
+  <div class="bg bg1"></div>
+  <div class="bg bg2"></div>
+  <div class="bg bg3"></div>
+  <div class="bg bg4"></div>
+</div>
+<div class="bgTint" aria-hidden="true"></div>
+
+<canvas id="confetti"></canvas>
+
+<div class="page">
+  <div class="wrap">
+    <h1>Will you be mine <span class="name">Maiumi</span>?</h1>
+
+    <div class="stage">
+      <div class="buttons" id="area">
+        <button id="yes">YES</button>
+        <button id="no">NO</button>
+
+        <div class="overlay" id="overlay">
+          <div class="big">CONGRATS ON THE BIG QUESTION!!!!</div>
+          <button class="next" id="openCard">OPEN THE CARD</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="card">
+      <h2>Dear Maiumi, 💖</h2>
+      <p>
+I love you so much! I made this little something and if you ended up here you obviously clicked the right button. Hahahah like you could even click no if you tried but wtv.
+
+I’m so happy that you said yes to being my Valentine, it absolutely made my day. However this isn’t the only thing you will be getting in the days to come.
+
+You truly have shown me so many things about myself I didn’t even know existed and I’m so grateful to you for that you don’t even understand. I’m so obsessed with you it’s on another level baby. The things I want to do to you are unreal.
+
+I am so thankful for you because you truly are the best feeling ever. Physically, mentally, just everything. I can’t wait to show you how much I love you in all the love languages this Valentine’s Day because you really deserve it.
+
+You are absolutely the best girlfriend ever and I can’t wait to wife you for reallll. Even though we are already married. You make me feel understood on another level and I can’t even begin to explain all the wonders of the world I want to enjoy with you — because after all, you are the greatest wonder the world has ever created.
+
+To end this shortly and sweetly:
+
+I’m really lucky,  
+because I have you.
+
+Happy Valentine’s Day ❤️  
+
+Love,  
+Ethan
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* RUNAWAY NO */
+const noBtn = document.getElementById("no");
+const area  = document.getElementById("area");
+
+area.addEventListener("mousemove", (e) => {
+  const r = noBtn.getBoundingClientRect();
+  const dx = e.clientX - (r.left + r.width / 2);
+  const dy = e.clientY - (r.top + r.height / 2);
+
+  if (Math.hypot(dx, dy) < 120) {
+    noBtn.style.left = (Math.random() * 80 + 10) + "%";
+    noBtn.style.top  = (Math.random() * 70 + 15) + "%";
+  }
+});
+
+/* CONFETTI */
+const confetti = document.getElementById("confetti");
+const ctx = confetti.getContext("2d");
+const colors = ["#ffffff", "#ffb3c7", "#ff4d6d"]; // white, light pink, light red
+let pieces = [];
+
+function resize(){
+  confetti.width = window.innerWidth;
+  confetti.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+function launchConfetti(){
+  confetti.style.display = "block";
+  pieces = [];
+  for(let i=0;i<260;i++){
+    pieces.push({
+      x: Math.random()*confetti.width,
+      y: Math.random()*confetti.height - confetti.height,
+      s: Math.random()*6+4,
+      c: colors[Math.floor(Math.random()*colors.length)],
+      vx: Math.random()*4-2,
+      vy: Math.random()*6+3,
+      rot: Math.random()*Math.PI
+    });
+  }
+  requestAnimationFrame(update);
+}
+
+function update(){
+  ctx.clearRect(0,0,confetti.width,confetti.height);
+  pieces.forEach(p=>{
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.05;
+
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    ctx.fillStyle = p.c;
+    ctx.fillRect(-p.s/2, -p.s/2, p.s, p.s);
+    ctx.restore();
+
+    p.rot += 0.06;
+  });
+  requestAnimationFrame(update);
+}
+
+/* YES FLOW */
+const yesBtn = document.getElementById("yes");
+const overlay = document.getElementById("overlay");
+const openCard = document.getElementById("openCard");
+const card = document.getElementById("card");
+
+yesBtn.onclick = () => {
+  overlay.classList.add("show");
+  launchConfetti();
+};
+
+openCard.onclick = () => {
+  overlay.classList.remove("show");
+  card.classList.add("show");
+  card.scrollIntoView({behavior:"smooth"});
+};
+</script>
+
+</body>
+</html>
